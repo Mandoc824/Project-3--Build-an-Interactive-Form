@@ -109,7 +109,7 @@ paymentSelect.addEventListener("change", (e) => {
 //8. form validation
 const entireForm = document.querySelector("form");
 
-//helper functions
+//helper functions - ALL USED TO VALIDATE ALL USER INPUT FIELDS
 function nameValidator() {
   const name = document.querySelector("input[id='name']").value;
   const RegEx = /^[\w\s]{2,20}$/;
@@ -163,84 +163,72 @@ function validateCVV() {
   const cvvValid = cvvRegex.test(CVV);
   return cvvValid;
 }
+//helper function for adding errors to elemetns
+function addError(element) {
+  element.parentElement.classList.add("not-valid");
+  element.parentElement.classList.remove("valid");
+  element.parentElement.lastElementChild.style.display = "inline";
+}
+//help function for removing added erros
+function removeError(element) {
+  element.parentElement.classList.remove("not-valid");
+  element.parentElement.classList.add("valid");
+  element.parentElement.lastElementChild.style.display = "none";
+}
 
+//when form is submitted all code in here will executed
 entireForm.addEventListener("submit", (e) => {
   const paymentSelect = document.querySelector("#payment");
   const name = document.querySelector("input[id='name']");
   const email = document.querySelector('input[id="email"]');
-  const activitiesFieldset = document.querySelector(
-    "fieldset[id='activities']"
-  );
-  const legend = activitiesFieldset.querySelector("legend");
+  const activitiesFieldset = document.querySelector("#activities-box");
+
   const creditNumber = document.querySelector("#cc-num");
   const zipCode = document.querySelector("#zip");
   const CVV = document.querySelector("#cvv");
   if (!nameValidator()) {
     e.preventDefault();
-    name.parentElement.classList.add("not-valid");
-    name.parentElement.classList.remove("valid");
-    name.parentElement.lastElementChild.style.display = "initial";
+    addError(name);
   } else {
-    name.parentElement.classList.remove("not-valid");
-    name.parentElement.classList.add("valid");
-    name.parentElement.lastElementChild.style.display = "none";
+    removeError(name);
   }
   if (!emailValidator()) {
     e.preventDefault();
-    email.parentElement.classList.add("not-valid");
-    email.parentElement.classList.remove("valid");
-    email.parentElement.lastElementChild.style.display = "initial";
+    addError(email);
   } else {
-    email.parentElement.classList.remove("not-valid");
-    email.parentElement.classList.add("valid");
-    email.parentElement.lastElementChild.style.display = "none";
+    removeError(email);
   }
   if (!activitiesChecked()) {
     e.preventDefault();
-    legend.classList.add("not-valid");
-    legend.classList.remove("valid");
-    activitiesFieldset.lastElementChild.style.display = "initial";
+    addError(activitiesFieldset);
   } else {
-    legend.classList.remove("not-valid");
-    legend.classList.add("valid");
-    activitiesFieldset.lastElementChild.style.display = "none";
+    removeError(activitiesFieldset);
   }
   if (paymentSelect[1].selected) {
     if (!validateCreditNumb()) {
       e.preventDefault();
-      creditNumber.parentElement.classList.add("not-valid");
-      creditNumber.parentElement.classList.remove("valid");
-      creditNumber.parentElement.lastElementChild.style.display = "initial";
+      addError(creditNumber);
     } else {
-      creditNumber.parentElement.classList.add("valid");
-      creditNumber.parentElement.classList.remove("not-valid");
-      creditNumber.parentElement.lastElementChild.style.display = "none";
+      removeError(creditNumber);
     }
     if (!validateZip()) {
       e.preventDefault();
-      zipCode.parentElement.classList.add("not-valid");
-      zipCode.parentElement.classList.remove("valid");
-      zipCode.parentElement.lastElementChild.style.display = "initial";
+      addError(zipCode);
     } else {
-      zipCode.parentElement.classList.add("valid");
-      zipCode.parentElement.classList.remove("not-valid");
-      zipCode.parentElement.lastElementChild.style.display = "none";
+      removeError(zipCode);
     }
     if (!validateCVV()) {
       e.preventDefault();
-      CVV.parentElement.classList.add("not-valid");
-      CVV.parentElement.classList.remove("valid");
-      CVV.parentElement.lastElementChild.style.display = "initial";
+      addError(CVV);
     } else {
-      CVV.parentElement.classList.add("valid");
-      CVV.parentElement.classList.remove("not-valid");
-      CVV.parentElement.lastElementChild.style.display = "none";
+      removeError(CVV);
     }
   }
 });
 
 //9 accessibility
 
+//blur and focus events added to all checkboxes
 function checkboxEventListener() {
   const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
 
@@ -253,5 +241,5 @@ function checkboxEventListener() {
     });
   }
 }
-
+//puts the function above into effect
 checkboxEventListener();
