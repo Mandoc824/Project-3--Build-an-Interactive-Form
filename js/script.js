@@ -94,15 +94,27 @@ activitiesFieldset.addEventListener("change", (e) => {
 
 const paymentSelect = document.querySelector('select[id="payment"]');
 const paymentOptions = paymentSelect.children;
+const bitcoinInfo = document.getElementById("bitcoin");
+const paypalInfo = document.getElementById("paypal");
+
+paypalInfo.style.display = "none";
+bitcoinInfo.style.display = "none";
 
 paymentOptions[1].selected = true;
-
+//function for disabling and enabling based on select
+function switchPayment(payment, close1, close2) {
+  payment.style.display = "inherit";
+  close1.style.display = "none";
+  close2.style.display = "none";
+}
 paymentSelect.addEventListener("change", (e) => {
   const creditCardInfo = document.querySelector('div[id="credit-card"]');
-  if (e.target.value !== "credit-card") {
-    creditCardInfo.style.display = "none";
-  } else {
-    creditCardInfo.style.display = "initial";
+  if (e.target.value === "credit-card") {
+    switchPayment(creditCardInfo, paypalInfo, bitcoinInfo);
+  } else if (e.target.value === "paypal") {
+    switchPayment(paypalInfo, creditCardInfo, bitcoinInfo);
+  } else if (e.target.value === "bitcoin") {
+    switchPayment(bitcoinInfo, paypalInfo, creditCardInfo);
   }
 });
 
